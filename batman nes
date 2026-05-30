@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batman (NES) - Fullscreen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #fullscreen-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            background: rgba(30, 108, 147, 0.9);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        #fullscreen-btn:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <button id="fullscreen-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    <div id="game-container">
+        <iframe src="https://cbgamesdev.github.io/chilibowlflash/example/batman.html" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-downloads allow-storage-access-by-user-activation"></iframe>
+    </div>
+    <script>
+        function toggleFullscreen() {
+            const doc = document;
+            const elem = document.documentElement;
+
+            if (!doc.fullscreenElement && !doc.webkitFullscreenElement && !doc.mozFullScreenElement && !doc.msFullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (doc.exitFullscreen) {
+                    doc.exitFullscreen();
+                } else if (doc.webkitExitFullscreen) {
+                    doc.webkitExitFullscreen();
+                } else if (doc.mozCancelFullScreen) {
+                    doc.mozCancelFullScreen();
+                } else if (doc.msExitFullscreen) {
+                    doc.msExitFullscreen();
+                }
+            }
+        }
+
+        // Auto-hide button after inactivity
+        let timeout;
+        const btn = document.getElementById('fullscreen-btn');
+        function showBtn() {
+            btn.style.opacity = '0.7';
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                if (!document.fullscreenElement) {
+                    btn.style.opacity = '0';
+                }
+            }, 3000);
+        }
+        document.addEventListener('mousemove', showBtn);
+        document.addEventListener('click', showBtn);
+        showBtn();
+    </script>
+</body>
+</html>
